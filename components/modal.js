@@ -1,6 +1,8 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "@/hooks/useStore"
+import { useLoader } from "@react-three/fiber";
+import { TextureLoader } from "three";
 
 
 export const Modal = ({ display }) => {
@@ -33,12 +35,14 @@ export const Modal = ({ display }) => {
 
             // 设置图片 URL
             setImageUrl(metadata.image);
+            const img = useLoader(TextureLoader, metadata.image);
         } catch (err) {
             return;
         } finally {
             setLoading(false);
         }
     };
+
     const getRes = async () => {
         if (ca.trim() === '') {
             return;
@@ -48,62 +52,16 @@ export const Modal = ({ display }) => {
         }
     }
 
+    const { toggleModal, addImage } = useStore();
+
+    const addToCubeList = () => {
+        addImage(imageUrl)
+    }
+
     const onChange = (e) => {
         setCa(e.target.value.trim())
     }
-    const { toggleModal, addImage } = useStore();
 
-    const testCode = () => {
-        async function fetchIpfsImageAsJpg(ipfsHash) {
-            try {
-                // 构建 IPFS 网关 URL
-                const ipfsUrl = `https://ipfs.io/ipfs/${ipfsHash}`;
-
-                // 发起请求
-                const response = await fetch(ipfsUrl, {
-                    headers: {
-                        'Accept': 'image/jpeg' // 明确请求 JPG 格式
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                // 获取图片 Blob
-                const imageBlob = await response.blob();
-
-                // 检查返回的 MIME 类型
-                if (!imageBlob.type.includes('jpeg')) {
-                    console.warn('返回的图片可能不是 JPG 格式，实际类型:', imageBlob.type);
-                }
-
-                return imageBlob;
-            } catch (error) {
-                console.error('获取 IPFS 图片失败:', error);
-                throw error;
-            }
-        }
-
-        // 使用示例
-        const ipfsHash = 'QmTRjvECyJbVWNqw5ibSvts2eHYWchmVMe5xfaLENBunkp';
-
-        fetchIpfsImageAsJpg(ipfsHash)
-            .then(blob => {
-                // 创建一个对象 URL 用于显示图片
-                const imageUrl = URL.createObjectURL(blob);
-
-                // 在页面上显示图片
-                const imgElement = document.createElement('img');
-                imgElement.src = imageUrl;
-                document.body.appendChild(imgElement);
-
-                console.log('成功获取 IPFS 图片:', blob, imageUrl);
-            })
-            .catch(error => {
-                console.error('处理过程中出错:', error);
-            });
-    }
 
     return (
         <>
@@ -149,8 +107,8 @@ export const Modal = ({ display }) => {
                                                     </div>
                                                 )}
                                     </div>
-                                    {/* <div onClick={() => { addImage(imageUrl) }} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div> */}
-                                    <div onClick={testCode} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div>
+                                    <div onClick={addToCubeList} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div>
+                                    {/* <div onClick={testCode} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div> */}
                                 </div>
                             </div>
                         </div>

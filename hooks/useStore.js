@@ -83,13 +83,29 @@ export const useStore = create((set) => ({
         }))
     },
     addImage: async (url) => {
-        // const img = useLoader(TextureLoader, res)
-        // console.log(res, img);
+        console.log(url);
+        let img;
+        try {
+            img = useLoader(TextureLoader, url)
+            console.log(img);
 
-        // set((prev) => ({
-        // images: prev.images.push(res),
-        // textures: prev.textures.push(img)
-        // }))
+        } catch (e) {
+            console.log(e);
+        } finally {
+            if (img) {
+
+                set((prev) => ({
+                    textures: [
+                        ...prev.textures,
+                        img
+                    ],
+                    images: [
+                        ...prev.images,
+                        url
+                    ]
+                }))
+            }
+        }
     },
     removeImage: () => {
 
