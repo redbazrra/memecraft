@@ -13,25 +13,36 @@ const images = {
 }
 
 export const TextureSelector = () => {
-    const { texture, setTexture } = useStore();
+    const { activeTexture, setActiveTexture, setActiveTextureIndex, images } = useStore();
 
 
-    const { dirt, log, grass, glass, wood, test } = useKeyboard();
+    const { up, down } = useKeyboard();
 
     useEffect(() => {
-        const textures = {
-            dirt,
-            log,
-            grass,
-            glass,
-            wood,
-            test
+        // 添加初始 textures
+    }, [])
+
+    useEffect(() => {
+        const total = images.length;
+        if (up) {
+            setActiveTextureIndex(-1);
         }
-        const pressedTexture = Object.entries(textures).find(([k, v]) => v)
-        if (pressedTexture) {
-            setTexture(pressedTexture[0]);
+        if (down) {
+            setActiveTextureIndex(1);
         }
-    }, [setTexture, dirt, log, grass, glass, wood, test])
+        // const textures = {
+        //     dirt,
+        //     log,
+        //     grass,
+        //     glass,
+        //     wood,
+        //     test
+        // }
+        // const pressedTexture = Object.entries(textures).find(([k, v]) => v)
+        // if (pressedTexture) {
+        //     setActiveTexture(pressedTexture[0]);
+        // }
+    }, [setActiveTexture, up, down])
 
     return (
         <div className="absolute top-1/2 left-6 transform -translate-x-1/8 -translate-y-8 text-white">
@@ -42,7 +53,7 @@ export const TextureSelector = () => {
                             <div className="text-white">{index + 1}</div>
                             <img width={24} height={24} src={src} alt={k} />
                             <div className="text-red-400">
-                                {texture === k ? '⬅' : ''}
+                                {activeTexture === k ? '⬅' : ''}
                             </div>
                         </div>
                     )

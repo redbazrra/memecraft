@@ -7,6 +7,7 @@ import { Player } from "@/components/player";
 import { FPV } from "@/components/fpv";
 import { Cubes } from '@/components/cubes';
 import { TextureSelector } from "@/components/textureSelector";
+import { Initial } from "@/components/Initial";
 
 export const Stage = () => {
     return (
@@ -14,6 +15,7 @@ export const Stage = () => {
             <Canvas>
                 {/* <Sky sunPosition={[100, 100, 20]} /> */}
                 <ambientLight intensity={0.5} />
+                <Initial />
                 <Physics>
                     <FPV />
                     <Player />

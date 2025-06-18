@@ -6,11 +6,13 @@ import { useBox } from "@react-three/cannon";
 export const Cube = ({ position, texture }) => {
     const [ref] = useBox(() => ({ mass: 0, position }))
 
-    const textures = useTextures();
 
-    const activeTexture = textures[texture + 'Texture'];
+    const { textures, addCube, removeCube, activeTextureIndex } = useStore();
 
-    const { addCube, removeCube } = useStore();
+
+    const activeTexture = textures[activeTextureIndex];
+
+
     return (
         <mesh
             ref={ref}
@@ -51,7 +53,7 @@ export const Cube = ({ position, texture }) => {
             }}
         >
             <boxGeometry attach='geometry' args={[1, 1, 1]} />
-            <meshStandardMaterial attach='material' map={activeTexture} />
+            <meshStandardMaterial attach='material' map={texture} />
         </mesh>
     )
 }
