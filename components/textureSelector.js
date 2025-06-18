@@ -23,7 +23,6 @@ export const TextureSelector = () => {
     }, [])
 
     useEffect(() => {
-        const total = images.length;
         if (up) {
             setActiveTextureIndex(-1);
         }

@@ -4,15 +4,6 @@ import { nanoid } from 'nanoid';
 import { useLoader } from "@react-three/fiber"
 import { TextureLoader, NearestFilter, RepeatWrapping } from "three"
 
-function getTextures() {
-    const temp = [];
-    const dirtTexture = new TextureLoader().load('/images/dirt.jpg')
-    dirtTexture.magFilter = NearestFilter;
-    temp.push(dirtTexture);
-
-    return temp;
-}
-
 export const useStore = create((set) => ({
     activeTexture: 'dirt',
     activeTextureIndex: 0,
@@ -32,7 +23,7 @@ export const useStore = create((set) => ({
                 {
                     key: nanoid(),
                     pos: [x, y, z],
-                    texture: prev.texture || prev.activeTextureIndex
+                    texture: prev.activeTexeureIndex
                 }
             ]
         }))
