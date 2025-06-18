@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useStore } from "@/hooks/useStore"
 
 
@@ -7,7 +7,6 @@ export const Modal = ({ display }) => {
     const [imageUrl, setImageUrl] = useState(null);
     const [ca, setCa] = useState('6Etyj7AjKg5YSSPfZdd2KiEh23M8PAAumNz8LMH6pump');
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
 
     const options = {
         method: 'GET',
@@ -35,7 +34,7 @@ export const Modal = ({ display }) => {
             // 设置图片 URL
             setImageUrl(metadata.image);
         } catch (err) {
-            setError(err.message);
+            return;
         } finally {
             setLoading(false);
         }
@@ -52,7 +51,60 @@ export const Modal = ({ display }) => {
     const onChange = (e) => {
         setCa(e.target.value.trim())
     }
-    const { toggleModal } = useStore();
+    const { toggleModal, addImage } = useStore();
+
+    const testCode = () => {
+        async function fetchIpfsImageAsJpg(ipfsHash) {
+            try {
+                // 构建 IPFS 网关 URL
+                const ipfsUrl = `https://ipfs.io/ipfs/${ipfsHash}`;
+
+                // 发起请求
+                const response = await fetch(ipfsUrl, {
+                    headers: {
+                        'Accept': 'image/jpeg' // 明确请求 JPG 格式
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                // 获取图片 Blob
+                const imageBlob = await response.blob();
+
+                // 检查返回的 MIME 类型
+                if (!imageBlob.type.includes('jpeg')) {
+                    console.warn('返回的图片可能不是 JPG 格式，实际类型:', imageBlob.type);
+                }
+
+                return imageBlob;
+            } catch (error) {
+                console.error('获取 IPFS 图片失败:', error);
+                throw error;
+            }
+        }
+
+        // 使用示例
+        const ipfsHash = 'QmTRjvECyJbVWNqw5ibSvts2eHYWchmVMe5xfaLENBunkp';
+
+        fetchIpfsImageAsJpg(ipfsHash)
+            .then(blob => {
+                // 创建一个对象 URL 用于显示图片
+                const imageUrl = URL.createObjectURL(blob);
+
+                // 在页面上显示图片
+                const imgElement = document.createElement('img');
+                imgElement.src = imageUrl;
+                document.body.appendChild(imgElement);
+
+                console.log('成功获取 IPFS 图片:', blob, imageUrl);
+            })
+            .catch(error => {
+                console.error('处理过程中出错:', error);
+            });
+    }
+
     return (
         <>
             {display ? (
@@ -71,14 +123,14 @@ export const Modal = ({ display }) => {
                                 </button>
                             </div>
                             <div className="p-4 md:p-5">
-                                <form className="space-y-4">
+                                <div className="space-y-4">
                                     <div className="flex gap-1">
                                         <input onChange={onChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="ca" required />
                                         <div onClick={getRes} className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">search</div>
                                     </div>
                                     <div className=" flex justify-center content-center">
                                         {
-                                            loading ? (<div className="text-white">loading</div>) : imageUrl ?
+                                            loading ? (<div className="text-white">loading... if not work, try another one</div>) : imageUrl ?
                                                 (
                                                     <div>
                                                         <img
@@ -97,8 +149,9 @@ export const Modal = ({ display }) => {
                                                     </div>
                                                 )}
                                     </div>
-                                    <div onClick={() => { }} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div>
-                                </form>
+                                    {/* <div onClick={() => { addImage(imageUrl) }} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div> */}
+                                    <div onClick={testCode} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div>
+                                </div>
                             </div>
                         </div>
                     </div>

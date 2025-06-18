@@ -4,6 +4,36 @@ import { nanoid } from 'nanoid';
 import { useLoader } from "@react-three/fiber"
 import { TextureLoader } from "three"
 
+// 辅助函数：用 Canvas 转换 Blob 为 JPG
+async function convertToJpg(ipfsUrl) {
+    // 1. 获取 IPFS 图片数据
+    const response = await fetch(ipfsUrl);
+    const blob = await response.blob();
+
+    // 2. 用 Canvas 转换格式（可选，如果已经是 JPG/PNG 可跳过）
+    const convertedBlob = await new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            // 转换为 JPG（或 PNG）
+            canvas.toBlob(
+                (resultBlob) => resolve(resultBlob),
+                'image/jpeg', // 或 'image/png'
+                0.9 // 质量参数（0-1）
+            );
+        };
+        img.src = URL.createObjectURL(blob);
+    });
+
+    // 3. 生成临时 Object URL
+    const objectUrl = URL.createObjectURL(convertedBlob);
+    return objectUrl; // 返回可直接使用的 URL
+}
+
 export const useStore = create((set) => ({
     modal: true,
     activeTexture: 'dirt',
@@ -52,8 +82,14 @@ export const useStore = create((set) => ({
             textures
         }))
     },
-    addImage: (url) => {
-        const img = useLoader(TextureLoader, url)
+    addImage: async (url) => {
+        // const img = useLoader(TextureLoader, res)
+        // console.log(res, img);
+
+        // set((prev) => ({
+        // images: prev.images.push(res),
+        // textures: prev.textures.push(img)
+        // }))
     },
     removeImage: () => {
 
