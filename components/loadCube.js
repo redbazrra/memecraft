@@ -4,8 +4,10 @@ import { useLoader } from "@react-three/fiber"
 import { TextureLoader } from "three"
 
 export const LoadCube = ({ loading, imgUrl }) => {
-    if (imgUrl) {
-        const texture = useLoader(TextureLoader, imgUrl);
+    try {
+        const texture = useLoader(TextureLoader, imgUrl ? imgUrl : '');
+    } catch (e) {
+
     }
     return (
         <div className=" flex justify-center content-center">
