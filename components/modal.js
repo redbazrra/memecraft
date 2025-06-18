@@ -35,7 +35,6 @@ export const Modal = ({ display }) => {
 
             // 设置图片 URL
             setImageUrl(metadata.image);
-            const img = useLoader(TextureLoader, metadata.image);
         } catch (err) {
             return;
         } finally {
