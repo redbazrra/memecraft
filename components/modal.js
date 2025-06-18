@@ -1,8 +1,7 @@
 'use client'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useStore } from "@/hooks/useStore"
-import { useLoader } from "@react-three/fiber";
-import { TextureLoader } from "three";
+import { LoadCube } from "./loadCube";
 
 
 export const Modal = ({ display }) => {
@@ -36,7 +35,7 @@ export const Modal = ({ display }) => {
             // 设置图片 URL
             setImageUrl(metadata.image);
         } catch (err) {
-            return;
+            setImageUrl(null);
         } finally {
             setLoading(false);
         }
@@ -85,27 +84,8 @@ export const Modal = ({ display }) => {
                                         <input onChange={onChange} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="ca" required />
                                         <div onClick={getRes} className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">search</div>
                                     </div>
-                                    <div className=" flex justify-center content-center">
-                                        {
-                                            loading ? (<div className="text-white">loading... if not work, try another one</div>) : imageUrl ?
-                                                (
-                                                    <div>
-                                                        <img
-                                                            src={imageUrl}
-                                                            alt="Token image"
-                                                            onError={(e) => {
-                                                                e.target.onerror = null;
-                                                                e.target.src = 'https://via.placeholder.com/400x400?text=Image+Not+Available';
-                                                            }}
-                                                        />
-
-                                                    </div>
-                                                ) : (
-                                                    <div className="">
-                                                        <p className="text-gray-500">No image available</p>
-                                                    </div>
-                                                )}
-                                    </div>
+                                    {/* loadCube */}
+                                    <LoadCube loading={loading} imgUrl={imageUrl} />
                                     <div onClick={addToCubeList} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div>
                                     {/* <div onClick={testCode} className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 cursor-pointer">add to cube list</div> */}
                                 </div>
