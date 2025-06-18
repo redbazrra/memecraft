@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 import { useLoader } from "@react-three/fiber"
-import { TextureLoader, NearestFilter, RepeatWrapping } from "three"
+import { TextureLoader } from "three"
 
 export const useStore = create((set) => ({
     activeTexture: 'dirt',
@@ -23,7 +23,7 @@ export const useStore = create((set) => ({
                 {
                     key: nanoid(),
                     pos: [x, y, z],
-                    texture: prev.activeTexeureIndex
+                    texture: prev.activeTextureIndex
                 }
             ]
         }))
@@ -41,20 +41,17 @@ export const useStore = create((set) => ({
             activeTexture
         }))
     },
-    // num: 1 || -1 不能简单的加减1, 和下标对不上.
     setActiveTextureIndex: (num) => {
         set((prev) => ({
             activeTextureIndex: prev.activeTextureIndex + num
         }))
     },
     setTextures: (textures) => {
-        // 使用 set 方法更新那个数组, 就像 deepseek 做的一样.
-        set((prev) => ({
+        set(() => ({
             textures
         }))
     },
     addImage: (url) => {
-        // 更新 texture 为 index, 这样在 cube.js 里就能 map 上去.
         const img = useLoader(TextureLoader, url)
     },
     removeImage: () => {

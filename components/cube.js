@@ -1,17 +1,13 @@
 'use client'
 import { useStore } from "@/hooks/useStore";
-import { useTextures } from "@/hooks/useTextures";
 import { useBox } from "@react-three/cannon";
 
 export const Cube = ({ position, texture }) => {
     const [ref] = useBox(() => ({ mass: 0, position }))
 
-    console.log('texture index: ', texture)
-    const { textures, addCube, removeCube, activeTextureIndex } = useStore();
-
+    const { textures, addCube, removeCube } = useStore();
 
     const activeTexture = textures[texture];
-
 
     return (
         <mesh

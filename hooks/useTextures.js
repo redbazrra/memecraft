@@ -1,5 +1,5 @@
 import { useLoader } from "@react-three/fiber"
-import { TextureLoader, NearestFilter, RepeatWrapping } from "three"
+import { TextureLoader, NearestFilter } from "three"
 
 export const useTextures = () => {
     const temp = []
@@ -8,8 +8,6 @@ export const useTextures = () => {
     const grassTexture = useLoader(TextureLoader, '/images/grass.jpg')
     const glassTexture = useLoader(TextureLoader, '/images/glass.png')
     const woodTexture = useLoader(TextureLoader, '/images/wood.png')
-    const groundTexture = useLoader(TextureLoader, '/images/ground.jpg');
-
 
     dirtTexture.magFilter = NearestFilter;
     logTexture.magFilter = NearestFilter;
@@ -19,24 +17,11 @@ export const useTextures = () => {
     glassTexture.magFilter = NearestFilter;
     woodTexture.magFilter = NearestFilter;
 
-    groundTexture.magFilter = NearestFilter;
-    groundTexture.wrapS = RepeatWrapping;
-    groundTexture.wrapT = RepeatWrapping;
-    groundTexture.repeat.set(100, 100)
-
     temp.push(dirtTexture);
     temp.push(logTexture);
     temp.push(grassTexture);
     temp.push(glassTexture);
     temp.push(woodTexture);
-    temp.push(groundTexture);
+
     return temp;
-    // return {
-    //     dirtTexture,
-    //     logTexture,
-    //     grassTexture,
-    //     glassTexture,
-    //     woodTexture,
-    //     groundTexture,
-    // }
 }

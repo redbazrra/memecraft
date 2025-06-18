@@ -1,7 +1,8 @@
 'use client'
 import { usePlane } from "@react-three/cannon"
-import { useTextures } from "../hooks/useTextures";
 import { useStore } from "../hooks/useStore";
+import { TextureLoader, NearestFilter, RepeatWrapping } from "three";
+import { useLoader } from "@react-three/fiber";
 
 export const Ground = () => {
     const [ref] = usePlane(() => ({
@@ -9,8 +10,11 @@ export const Ground = () => {
         position: [0, 0.5, 0]
     }))
 
-    const { groundTexture } = useTextures();
-
+    const groundTexture = useLoader(TextureLoader, '/images/ground.jpg');
+    groundTexture.magFilter = NearestFilter;
+    groundTexture.wrapS = RepeatWrapping;
+    groundTexture.wrapT = RepeatWrapping;
+    groundTexture.repeat.set(100, 100)
     const { addCube } = useStore()
 
     return (
