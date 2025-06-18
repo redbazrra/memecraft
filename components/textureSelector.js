@@ -4,7 +4,7 @@ import { useStore } from "@/hooks/useStore";
 import { useEffect } from "react";
 
 export const TextureSelector = () => {
-    const { activeTextureIndex, setActiveTexture, setActiveTextureIndex, textures, images } = useStore();
+    const { activeTextureIndex, setActiveTexture, setActiveTextureIndex, textures, images, modal, toggleModal } = useStore();
 
     const { up, down } = useKeyboard();
 
@@ -26,12 +26,12 @@ export const TextureSelector = () => {
     }, [setActiveTexture, up, down])
 
     return (
-        <div className="absolute top-1/2 left-6 transform -translate-x-1/8 -translate-y-8 text-white">
-            <div className="flex flex-col">
+        <div className="absolute top-1/6 left-6 transform -translate-x-1/8 -translate-y-8 text-white">
+            <div className="flex flex-col gap-0.5">
                 {images.map((src, index) => {
                     return (
                         <div className="flex gap-2" key={index}>
-                            <div className="text-white">{index + 1}</div>
+                            {/* <div className="text-white">{index + 1}</div> */}
                             <img width={24} height={24} src={src} alt=' ' />
                             <div className="text-red-400">
                                 {activeTextureIndex === index ? '⬅' : ''}
@@ -39,8 +39,8 @@ export const TextureSelector = () => {
                         </div>
                     )
                 })}
-                <div></div>
             </div>
+            <div className="mt-2 border border-dashed border-gray-600 flex content-center justify-center cursor-pointer" style={{ width: '25px' }} onClick={() => toggleModal()}> + </div>
         </div>
     )
 }

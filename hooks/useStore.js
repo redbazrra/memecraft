@@ -5,6 +5,7 @@ import { useLoader } from "@react-three/fiber"
 import { TextureLoader } from "three"
 
 export const useStore = create((set) => ({
+    modal: true,
     activeTexture: 'dirt',
     activeTextureIndex: 0,
     textures: [],
@@ -56,5 +57,10 @@ export const useStore = create((set) => ({
     },
     removeImage: () => {
 
+    },
+    toggleModal: () => {
+        set((prev) => ({
+            modal: !prev.modal
+        }))
     }
 }))

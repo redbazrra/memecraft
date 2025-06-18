@@ -6,6 +6,6 @@ export const FPV = () => {
     const { camera, gl } = useThree();
 
     return (
-        <PointerLockControls args={[camera, gl.domElement]}></PointerLockControls>
+        <PointerLockControls selector="canvas" args={[camera, gl.domElement]}></PointerLockControls>
     )
 }
